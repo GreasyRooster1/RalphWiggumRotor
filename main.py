@@ -1,6 +1,10 @@
 import os
 
 from DeepSeekCoderV2 import DeepSeekCoderV2
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 model = DeepSeekCoderV2()
 model.init_model()
