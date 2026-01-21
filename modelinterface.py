@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class ModelInterface(ABC):
     @abstractmethod
-    def loadModel(self):
+    def init_model(self):
         #initialize the model
         pass
 
