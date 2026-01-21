@@ -1,5 +1,7 @@
 from modelinterface import ModelInterface
+from openai import OpenAI
 
+from util import load_api_key
 
 class DeepSeekCoderV2(ModelInterface):
     def __init__(self):
