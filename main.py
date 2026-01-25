@@ -9,4 +9,6 @@ load_dotenv()
 model = DeepSeekCoderV2()
 model.init_model()
 
-model.send_model_request("what is the purpose of ralph wiggums in the context of AI?")
+stream = model.stream_model_request("what is the purpose of ralph wiggums in the context of AI?")
+for chunk in stream:
+    print(chunk['message']['content'], end='', flush=True)
