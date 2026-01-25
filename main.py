@@ -62,7 +62,8 @@ def main():
         os.path.join(proj_path, main_file_name))
 
     generate_commit_message(commit_model,
-                            "project code:\n "+read_file(os.path.join(proj_path, main_file_name))+"\n\nproject outline:\n "+read_file(os.path.join(proj_path, user_outline_name)))
+                            "project code:\n "+read_file(os.path.join(proj_path, main_file_name))+"\n\nproject outline:\n "+read_file(os.path.join(proj_path, user_outline_name)),
+                            proj_path)
 
     while True:
         print("Starting creator generation...")
@@ -85,13 +86,13 @@ def generate_to_file(message,model,path):
             f.write(val)
             print(chunk['message']['content'], end='', flush=True)
 
-def generate_commit_message(model,message):
+def generate_commit_message(model,message,dir):
     response = model.send_model_request(message)
-    commit(response)
+    commit(response,dir)
 
-def commit(message):
-    subprocess.run(["git", "add","--all"])
-    subprocess.run(["git", "commit", "-m", message])
+def commit(message,dir):
+    print(subprocess.run(["git", "add","--all"],cwd=dir, capture_output=True, text=True, check=True))
+    print(subprocess.run(["git", "commit", "-m", message],cwd=dir, capture_output=True, text=True, check=True))
 
 def read_file(path):
     with open(path, 'r', encoding='utf-8') as file:
