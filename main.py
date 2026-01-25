@@ -50,8 +50,6 @@ def main():
     you will be given the diff for a commit on a project. write a very short and concise commit message. you should never output anything longer than a sentence.
     '''
 
-    generate_commit_message(commit_model,proj_path)
-
     print("Starting initial creator generation...")
     generate_to_file(
         "project outline:\n "+read_file(os.path.join(proj_path, user_outline_name))+"\n\nwrite the first instructions for the dev team to start on. make sure the objectives are achievable for the first iteration",
