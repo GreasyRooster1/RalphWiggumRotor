@@ -47,8 +47,10 @@ def main():
     commit_model.init_model()
 
     commit_model.sys_prompt = '''
-    You will be given a code segment and the outline for a project. write a short and concise commit message that captures the changes made. respond in short answers
+    you will be given the diff for a commit on a project. write a very short and concise commit message. you should never output anything longer than a sentence.
     '''
+
+    generate_commit_message(commit_model,proj_path)
 
     print("Starting initial creator generation...")
     generate_to_file(
@@ -86,8 +88,11 @@ def generate_to_file(message,model,path):
             f.write(val)
             print(chunk['message']['content'], end='', flush=True)
 
-def generate_commit_message(model,message,dir):
-    response = model.send_model_request(message)
+def generate_commit_message(model,dir):
+    diff = subprocess.run(["git", "diff"], capture_output=True, text=True, check=True).stdout
+    print(diff)
+    response = model.send_model_request(diff)['message']['content']
+    print(response)
     commit(response,dir)
 
 def commit(message,dir):
