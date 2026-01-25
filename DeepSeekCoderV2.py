@@ -28,3 +28,23 @@ class DeepSeekCoderV2(ModelInterface):
                 'temperature': self.temp,
             }
         )
+
+    def stream_model_request(self, message: str):
+        response = chat(
+            model='gemma3',
+            messages=[
+                {
+                    'role': 'system',
+                    'content': self.sys_prompt,
+                },
+                {
+                    'role': 'user',
+                    'content': message,
+                },
+            ],
+            options={
+                'temperature': self.temp,
+            },
+            stream=True,
+        )
+        return response

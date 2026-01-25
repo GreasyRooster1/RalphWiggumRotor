@@ -8,3 +8,7 @@ class ModelInterface(ABC):
     @abstractmethod
     def send_model_request(self, message: str):
         pass
+
+    @abstractmethod
+    def stream_model_request(self, message: str):
+        pass
