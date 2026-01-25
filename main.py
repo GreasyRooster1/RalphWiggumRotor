@@ -34,19 +34,25 @@ def main():
 
     creator_model.sys_prompt = '''
     You are a creative director.
-    You will be provided with an outline of the project, and code to use to help create the outline.
+    You will be provided with an outline of the project, and code from the project.
     Your goal is to write a the next creative and semi-dev instructions for the dev team to follow, they follow your words very closely.
     you will look for any potential bugs, and add them to the instructions to be fixed.
+    your instructions should be short and simple for the dev team to execute.
     your response goes straight into the outline file, do not commentate or speak ever
-    The project is in JavaScript, the dev team uses the P5.js library.
-    The boilerplate html for p5js is already written.
-    the code goes directly into a script tag.
-    never write code segments ever, in any language
+    you do not need to worry about the details of the development, you are mainly a creative director.
+    never ever write code segments ever, in any language
+    '''
+
+    commit_model = DeepSeekCoderV2()
+    commit_model.init_model()
+
+    commit_model.sys_prompt = '''
+    You will be given a code segment and the outline for a project. write a short and concise commit message that captures the changes made. respond in short answers
     '''
 
     print("Starting initial creator generation...")
     generate_to_file(
-        "project outline:\n "+read_file(os.path.join(proj_path, user_outline_name)),
+        "project outline:\n "+read_file(os.path.join(proj_path, user_outline_name))+"\n\nwrite the first instructions for the dev team to start on. make sure the objectives are achievable for the first iteration",
         creator_model,
         os.path.join(proj_path, creator_outline_name))
     print("Starting coder generation...")
@@ -55,15 +61,19 @@ def main():
         programmer_model,
         os.path.join(proj_path, main_file_name))
 
+    generate_commit_message(commit_model,
+                            "project code:\n "+read_file(os.path.join(proj_path, main_file_name))+"\n\nproject outline:\n "+read_file(os.path.join(proj_path, user_outline_name)))
+
     while True:
         print("Starting creator generation...")
         generate_to_file(
-                "----------\nproject code:\n "+read_file(os.path.join(proj_path, main_file_name))+" -----------\nproject outline:\n "+read_file(os.path.join(proj_path, user_outline_name)),
+                "project code:\n "+read_file(os.path.join(proj_path, main_file_name))+"\n\nproject outline:\n "+read_file(os.path.join(proj_path, user_outline_name))+"\n\nuse the outline and the project code to suggest new changes that you would like to see. make the instructions simple for the dev team. make sure to check for bugs",
             creator_model,
             os.path.join(proj_path, creator_outline_name))
         print("Starting coder generation...")
         generate_to_file(
-            "project outline:\n "+read_file(os.path.join(proj_path, creator_outline_name)),
+            "project code:\n "+read_file(os.path.join(proj_path, main_file_name))+"\n\ndev instructions:\n "+read_file(os.path.join(proj_path, creator_outline_name))+"\n\nuse the instructions to update the code and apply those changes.",
+
             programmer_model,
             os.path.join(proj_path, main_file_name))
 
@@ -74,6 +84,10 @@ def generate_to_file(message,model,path):
             val = chunk['message']['content']
             f.write(val)
             print(chunk['message']['content'], end='', flush=True)
+
+def generate_commit_message(model,message):
+    response = model.send_model_request(message)
+    commit(response)
 
 def commit(message):
     subprocess.run(["git", "add","--all"])
