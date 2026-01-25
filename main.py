@@ -6,8 +6,6 @@ import subprocess
 
 load_dotenv()
 
-
-
 def main():
     proj_path="./temp"
     main_file_name = "main.js"
@@ -81,3 +79,8 @@ def read_file(path):
     with open(path, 'r', encoding='utf-8') as file:
         file_content = file.read()
     return file_content
+
+
+
+if __name__ == "__main__":
+    main()
