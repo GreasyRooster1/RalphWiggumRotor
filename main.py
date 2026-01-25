@@ -2,16 +2,17 @@ import os
 
 from DeepSeekCoderV2 import DeepSeekCoderV2
 from dotenv import load_dotenv
-import git
-
-temp_path="./temp"
-main_file_name = "main.py"
+import subprocess
 
 load_dotenv()
 
 
 
 def main():
+    proj_path="./temp"
+    main_file_name = "main.py"
+
+
     programmer_model = DeepSeekCoderV2()
     programmer_model.init_model()
 
@@ -26,3 +27,7 @@ def generate_to_file(message,model,path):
             val = chunk['message']['content']
             f.write(val)
             print(chunk['message']['content'], end='', flush=True)
+
+def commit(message):
+    subprocess.run(["git", "add","--all"])
+    subprocess.run(["git", "commit", "-m", message])
