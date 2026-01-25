@@ -35,6 +35,7 @@ class DeepSeekCoderV2(ModelInterface):
                 'temperature': self.temp,
             }
         )
+        return response
 
     def stream_model_request(self, message: str):
         response = self.client.chat(
