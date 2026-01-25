@@ -12,14 +12,14 @@ class DeepSeekCoderV2(ModelInterface):
         self.temp = None
         self.client = None
         self.sys_prompt = ""
+        self.client = None
 
     def init_model(self):
         host = load_env('OLLAMA_HOST')
-        client = Client(host=host)
-        pass
+        self.client = Client(host=host)
 
     def send_model_request(self, message: str):
-        response = chat(
+        response = self.client.chat(
             model='deepseek-coder-v2',
             messages=[
                 {
@@ -37,7 +37,7 @@ class DeepSeekCoderV2(ModelInterface):
         )
 
     def stream_model_request(self, message: str):
-        response = chat(
+        response = self.client.chat(
             model='deepseek-coder-v2',
             messages=[
                 {
