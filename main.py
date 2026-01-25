@@ -11,6 +11,8 @@ load_dotenv()
 def main():
     proj_path="./temp"
     main_file_name = "main.js"
+    user_outline_name = "USER_OUTLINE.md"
+    creator_outline_name = "CREATOR_OUTLINE.md"
 
 
     programmer_model = DeepSeekCoderV2()
@@ -40,8 +42,28 @@ def main():
     the project outline you write is written in markdown
     '''
 
+    print("Starting initial creator generation...")
+    generate_to_file(
+        "this is the first iteration of the project, refer to the overall project outline and create the outline for the first iteration. project outline:\n "+read_file(os.path.join(proj_path, user_outline_name)),
+        creator_model,
+        os.path.join(proj_path, creator_outline_name))
+    print("Starting coder generation...")
+    generate_to_file(
+        "project outline:\n "+read_file(os.path.join(proj_path, creator_outline_name)),
+        creator_model,
+        os.path.join(proj_path, creator_outline_name))
+
     while True:
-        generate_to_file()
+        print("Starting creator generation...")
+        generate_to_file(
+                "----------\nproject code:\n "+read_file(os.path.join(proj_path, main_file_name))+" -----------\nproject outline:\n "+read_file(os.path.join(proj_path, user_outline_name)),
+            creator_model,
+            os.path.join(proj_path, creator_outline_name))
+        print("Starting coder generation...")
+        generate_to_file(
+            "project outline:\n "+read_file(os.path.join(proj_path, creator_outline_name)),
+            creator_model,
+            os.path.join(proj_path, creator_outline_name))
 
 def generate_to_file(message,model,path):
     stream = model.stream_model_request("make a square bounce on the screen")
@@ -54,3 +76,8 @@ def generate_to_file(message,model,path):
 def commit(message):
     subprocess.run(["git", "add","--all"])
     subprocess.run(["git", "commit", "-m", message])
+
+def read_file(path):
+    with open(path, 'r', encoding='utf-8') as file:
+        file_content = file.read()
+    return file_content
