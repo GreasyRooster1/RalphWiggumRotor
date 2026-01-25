@@ -9,7 +9,7 @@ from util import load_env
 class DeepSeekCoderV2(ModelInterface):
     def __init__(self):
         self.model_name = None
-        self.temp = None
+        self.temp = 0.7
         self.client = None
         self.sys_prompt = ""
         self.client = None
