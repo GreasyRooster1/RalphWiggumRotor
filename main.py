@@ -28,6 +28,18 @@ def main():
     you dont take creative liberties, ever.
     '''
 
+    creator_model = DeepSeekCoderV2()
+    creator_model.init_model()
+
+    creator_model.sys_prompt = '''
+    You are a creative director.
+    You will be provided with a project outline to follow, and code to review.
+    Your goal is to write a new, refreshed project outline for the dev team to follow, they follow your words exactly.
+    write your outline using the overall project goals, and the code provided.
+    you will look for any potential bugs, and add them to to outline to be fixed.
+    the project outline you write is written in markdown
+    '''
+
     while True:
         generate_to_file()
 
