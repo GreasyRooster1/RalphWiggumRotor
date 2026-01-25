@@ -1,5 +1,10 @@
+import os
+
 from modelinterface import ModelInterface
-from ollama import chat
+from ollama import chat, Client
+
+from util import load_env
+
 
 class DeepSeekCoderV2(ModelInterface):
     def __init__(self):
@@ -9,6 +14,8 @@ class DeepSeekCoderV2(ModelInterface):
         self.sys_prompt = ""
 
     def init_model(self):
+        host = load_env('OLLAMA_HOST')
+        client = Client(host=host)
         pass
 
     def send_model_request(self, message: str):

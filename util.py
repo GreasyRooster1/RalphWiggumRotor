@@ -1,7 +1,7 @@
 import os
 
 
-def load_api_key(env):
+def load_env(env):
     api_key = os.environ.get(env)
     if api_key:
         return api_key
