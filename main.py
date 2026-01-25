@@ -10,15 +10,26 @@ load_dotenv()
 
 def main():
     proj_path="./temp"
-    main_file_name = "main.py"
+    main_file_name = "main.js"
 
 
     programmer_model = DeepSeekCoderV2()
     programmer_model.init_model()
 
-    programmer_model.sys_prompt = "You are an intelligent programmer, you only ever output code, never any commentary on your code, unless in the form of code comments. You write in JavaScript, you use the P5.js library. The boilerplate html for p5js is already written. your code goes directly into a script tag. remember to always define your variables and use correct syntax. Leave comments annotating your code frequently. do not output your code with markdown styling"
+    programmer_model.sys_prompt = '''
+    You are an intelligent programmer, you only ever output code, never any commentary on your code, unless in the form of code comments.
+    You write in JavaScript, you use the P5.js library.
+    The boilerplate html for p5js is already written.
+    your code goes directly into a script tag.
+    remember to always define your variables and use correct syntax.
+    Leave comments annotating your code frequently.
+    do not output your code with markdown styling, code is directly entered into a script tag verbatim.
+    you will write code for a project provided by the user, follow their project outline very closely.
+    you dont take creative liberties, ever.
+    '''
 
-
+    while True:
+        generate_to_file()
 
 def generate_to_file(message,model,path):
     stream = model.stream_model_request("make a square bounce on the screen")
