@@ -61,9 +61,7 @@ def main():
         programmer_model,
         os.path.join(proj_path, main_file_name))
 
-    generate_commit_message(commit_model,
-                            "project code:\n "+read_file(os.path.join(proj_path, main_file_name))+"\n\nproject outline:\n "+read_file(os.path.join(proj_path, user_outline_name)),
-                            proj_path)
+    generate_commit_message(commit_model,proj_path)
 
     while True:
         print("Starting creator generation...")
