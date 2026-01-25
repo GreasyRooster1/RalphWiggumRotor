@@ -13,7 +13,7 @@ class DeepSeekCoderV2(ModelInterface):
 
     def send_model_request(self, message: str):
         response = chat(
-            model='gemma3',
+            model='deepseek-coder-v2',
             messages=[
                 {
                     'role': 'system',
@@ -31,7 +31,7 @@ class DeepSeekCoderV2(ModelInterface):
 
     def stream_model_request(self, message: str):
         response = chat(
-            model='gemma3',
+            model='deepseek-coder-v2',
             messages=[
                 {
                     'role': 'system',
